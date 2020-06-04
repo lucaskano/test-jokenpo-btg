@@ -2,7 +2,13 @@ package br.com.btg.jokenpo.enumeration;
 
 public enum EnumException {
 
-    GENERIC_ERROR("ERROR-0001", "JOKENPO", "GENERIC ERROR", "GENERIC ERROR", "Erro desconhecido");
+    GENERIC_ERROR("ERROR-0001", "JOKENPO", "GENERIC ERROR", "GENERIC ERROR", "Generic Error"),
+
+    //Player Errors
+    PLAYER_SAVING_ERROR("ERROR-0002", "JOKENPO", "SAVING ERROR", "SAVING ERROR", "Error trying to save"),
+    PLAYER_FIND_ALL_ERROR("ERROR-0003", "JOKENPO", "FINDING ERROR", "FINDING ERROR", "Error trying to find");
+
+    //
 
     private String code;
     private String origin;
