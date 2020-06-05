@@ -16,15 +16,15 @@ public enum EnumMovement {
     PAPER("PAPER");
 
     static {
-        STONE.setLoses(asList(SPOCK, PAPER));
-        LIZARD.setLoses(asList(SCISSORS, STONE));
-        SPOCK.setLoses(asList(LIZARD, PAPER));
-        SCISSORS.setLoses(asList(SPOCK, STONE));
-        PAPER.setLoses(asList(SCISSORS, LIZARD));
+        STONE.setWeaknesses(asList(SPOCK, PAPER));
+        LIZARD.setWeaknesses(asList(SCISSORS, STONE));
+        SPOCK.setWeaknesses(asList(LIZARD, PAPER));
+        SCISSORS.setWeaknesses(asList(SPOCK, STONE));
+        PAPER.setWeaknesses(asList(SCISSORS, LIZARD));
     }
 
     private String name;
-    private List<EnumMovement> loses;
+    private List<EnumMovement> weaknesses;
 
     EnumMovement(String name) {
         this.name = name;
@@ -38,12 +38,12 @@ public enum EnumMovement {
         this.name = name;
     }
 
-    public List<EnumMovement> getLoses() {
-        return loses;
+    public List<EnumMovement> getWeaknesses() {
+        return weaknesses;
     }
 
-    public void setLoses(List<EnumMovement> loses) {
-        this.loses = loses;
+    public void setWeaknesses(List<EnumMovement> weaknesses) {
+        this.weaknesses = weaknesses;
     }
 
     public static EnumMovement getEnumMovementByName(String name){

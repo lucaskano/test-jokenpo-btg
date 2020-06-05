@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class MoveRequest {
 
-    @Size(min = 1)
+    @Length(min = 4, max = 120, message = "The length must be between 4 and 120 characters")
     @NotBlank(message = "Player is required")
     private String playerName;
 

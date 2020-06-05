@@ -21,6 +21,11 @@ public class MoveSingleton {
         return moveEntityInstance;
     }
 
+    public static List<MoveEntity> clear(){
+        moveEntityInstance = new ArrayList<>();
+        return getInstance();
+    }
+
     public String getINFO() {
         return INFO;
     }
