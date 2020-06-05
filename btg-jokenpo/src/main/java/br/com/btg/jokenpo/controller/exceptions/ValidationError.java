@@ -1,4 +1,4 @@
-package br.com.btg.jokenpo.controller.exception;
+package br.com.btg.jokenpo.controller.exceptions;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

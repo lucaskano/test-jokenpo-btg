@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/moves")
+@CrossOrigin(origins = "*")
 public class MoveController {
 
     @Autowired
@@ -23,6 +25,11 @@ public class MoveController {
 
     @GetMapping
     public ResponseEntity<Object> findAll(){
-        return ResponseEntity.ok(new FormatResponse<>(moveService.findAll()));
+        return ResponseEntity.ok(new FormatResponse<>(moveService.getAll()));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Object> delete(@PathParam("playerName") String playerName){
+        return ResponseEntity.ok(new FormatResponse<>(moveService.deleteByPlayerName(playerName)));
     }
 }

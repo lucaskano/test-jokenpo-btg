@@ -1,4 +1,4 @@
-package br.com.btg.jokenpo.entity;
+package br.com.btg.jokenpo.entities;
 
 import br.com.btg.jokenpo.enumeration.EnumMovement;
 
@@ -12,22 +12,22 @@ import javax.persistence.Entity;
  * */
 
 @Entity
-public class Move {
+public class MoveEntity {
 
-    private Player player;
+    private PlayerEntity playerEntity;
     private EnumMovement enumMovement;
 
-    public Move(Player player, EnumMovement enumMovement) {
-        this.player = player;
+    public MoveEntity(PlayerEntity playerEntity, EnumMovement enumMovement) {
+        this.playerEntity = playerEntity;
         this.enumMovement = enumMovement;
     }
 
-    public Player getPlayer() {
-        return player;
+    public PlayerEntity getPlayerEntity() {
+        return playerEntity;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayerEntity(PlayerEntity playerEntity) {
+        this.playerEntity = playerEntity;
     }
 
     public EnumMovement getEnumMovement() {

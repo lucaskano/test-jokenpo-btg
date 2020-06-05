@@ -1,8 +1,8 @@
-package br.com.btg.jokenpo.entity.mapper;
+package br.com.btg.jokenpo.entities.mappers;
 
 import br.com.btg.jokenpo.dto.PlayerRequest;
 import br.com.btg.jokenpo.dto.PlayerResponse;
-import br.com.btg.jokenpo.entity.Player;
+import br.com.btg.jokenpo.entities.PlayerEntity;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -14,15 +14,15 @@ public class PlayerMapper {
 
     private static final ModelMapper MAPPER = new ModelMapper();
 
-    public static Player requestToPlayerEntity(PlayerRequest playerRequest){
+    public static PlayerEntity requestToPlayerEntity(PlayerRequest playerRequest){
         LOGGER.debug("Converting PlayerRequest object to entity (Player) object");
         MAPPER.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        return MAPPER.map(playerRequest, Player.class);
+        return MAPPER.map(playerRequest, PlayerEntity.class);
     }
 
-    public static PlayerResponse entityToResponse(Player player){
+    public static PlayerResponse entityToResponse(PlayerEntity playerEntity){
         LOGGER.debug("Converting entity (Player) object to PlayerResponse object");
         MAPPER.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        return MAPPER.map(player, PlayerResponse.class);
+        return MAPPER.map(playerEntity, PlayerResponse.class);
     }
 }

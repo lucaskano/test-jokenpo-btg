@@ -1,4 +1,4 @@
-package br.com.btg.jokenpo.controller.exception;
+package br.com.btg.jokenpo.controller.exceptions;
 
 import br.com.btg.jokenpo.services.exceptions.CustomException;
 import br.com.btg.jokenpo.services.exceptions.ContentAlreadyExistsException;

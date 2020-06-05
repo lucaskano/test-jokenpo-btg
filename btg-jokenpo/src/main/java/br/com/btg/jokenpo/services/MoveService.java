@@ -2,12 +2,12 @@ package br.com.btg.jokenpo.services;
 
 import br.com.btg.jokenpo.dto.MoveRequest;
 import br.com.btg.jokenpo.dto.MoveResponse;
-import br.com.btg.jokenpo.entity.Move;
-import br.com.btg.jokenpo.entity.Player;
-import br.com.btg.jokenpo.entity.mapper.MoveMapper;
+import br.com.btg.jokenpo.entities.MoveEntity;
+import br.com.btg.jokenpo.entities.PlayerEntity;
+import br.com.btg.jokenpo.entities.mappers.MoveMapper;
 import br.com.btg.jokenpo.enumeration.EnumMovement;
-import br.com.btg.jokenpo.repository.MoveRepository;
-import br.com.btg.jokenpo.repository.PlayerRepository;
+import br.com.btg.jokenpo.repositories.MoveRepository;
+import br.com.btg.jokenpo.repositories.PlayerRepository;
 import br.com.btg.jokenpo.services.exceptions.ContentAlreadyExistsException;
 import br.com.btg.jokenpo.services.exceptions.CustomException;
 import br.com.btg.jokenpo.services.exceptions.ObjectNotFoundException;
@@ -42,10 +42,10 @@ public class MoveService {
         LOGGER.debug("Move: {}", moveRequest);
 
         //Get the player associated with the move
-        Player player = playerRepository.findByName(moveRequest.getPlayerName());
+        PlayerEntity playerEntity = playerRepository.findByName(moveRequest.getPlayerName());
 
         //Checks if the player already has a move
-        checkIfAlreadyMoved(player);
+        checkIfAlreadyMoved(playerEntity);
 
         //Get the movement
         EnumMovement movement = EnumMovement.getEnumMovementByName(moveRequest.getMovement());
@@ -56,25 +56,40 @@ public class MoveService {
         }
 
         //Save move
-        Move move = moveRepository.saveMovement(new Move(player, movement));
+        MoveEntity moveEntity = moveRepository.saveMovement(new MoveEntity(playerEntity, movement));
 
         //Convert Move (entity) to response
-        return MoveMapper.entityToResponse(move);
+        return MoveMapper.entityToResponse(moveEntity);
     }
 
-    public List<MoveResponse> findAll(){
+    public List<MoveResponse> getAll(){
         LOGGER.debug("Finding all movements");
-        List<Move> movesList = this.moveRepository.findAll();
+        List<MoveEntity> movesList = this.moveRepository.findAll();
         List<MoveResponse> movesResponse = new ArrayList<>();
         movesList.forEach(element -> movesResponse.add(MoveMapper.entityToResponse(element)));
         LOGGER.debug("Movements searched");
         return movesResponse;
     }
 
-    private void checkIfAlreadyMoved(Player player){
+    public List<MoveResponse> deleteByPlayerName(String playerName){
+        if(StringUtils.isEmpty(playerName)){
+            LOGGER.error("Player name is invalid");
+            throw new CustomException("The playername parameter is invalid", "Invalid Parameter");
+        }
+        LOGGER.debug("Finding {} movement", playerName);
+        MoveEntity moveEntity = this.moveRepository.findByPlayerName(playerName);
+        LOGGER.debug("Deleting movement");
+        if(this.moveRepository.delete(moveEntity)){
+            return this.getAll();
+        };
+        LOGGER.error("Error trying to delete the movement");
+        throw new CustomException("Error trying to delete the movement", "Error deleting");
+    }
+
+    private void checkIfAlreadyMoved(PlayerEntity playerEntity){
         long count = moveRepository.findAll().stream()
                 .filter(element ->
-                        (element.getPlayer().getPlayerName()).compareToIgnoreCase(player.getPlayerName()) == 0)
+                        (element.getPlayerEntity().getPlayerName()).compareToIgnoreCase(playerEntity.getPlayerName()) == 0)
                 .count();
         if(count > 0){
             LOGGER.error("Error: Movement already exists for these player");

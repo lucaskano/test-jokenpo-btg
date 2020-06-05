@@ -1,4 +1,4 @@
-package br.com.btg.jokenpo.entity;
+package br.com.btg.jokenpo.entities;
 
 import javax.persistence.Entity;
 import java.util.Objects;
@@ -11,15 +11,15 @@ import java.util.Objects;
  * */
 
 @Entity
-public class Player {
+public class PlayerEntity {
 
     private String playerName;
 
-    public Player(){
+    public PlayerEntity(){
 
     }
 
-    public Player(String playerName) {
+    public PlayerEntity(String playerName) {
         this.playerName = playerName;
     }
 
@@ -35,8 +35,8 @@ public class Player {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
-        return Objects.equals(playerName, player.playerName);
+        PlayerEntity playerEntity = (PlayerEntity) o;
+        return Objects.equals(playerName, playerEntity.playerName);
     }
 
     @Override

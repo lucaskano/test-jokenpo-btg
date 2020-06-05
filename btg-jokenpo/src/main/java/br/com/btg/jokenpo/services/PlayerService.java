@@ -2,10 +2,10 @@ package br.com.btg.jokenpo.services;
 
 import br.com.btg.jokenpo.dto.PlayerRequest;
 import br.com.btg.jokenpo.dto.PlayerResponse;
-import br.com.btg.jokenpo.entity.Player;
-import br.com.btg.jokenpo.entity.mapper.PlayerMapper;
+import br.com.btg.jokenpo.entities.PlayerEntity;
+import br.com.btg.jokenpo.entities.mappers.PlayerMapper;
 import br.com.btg.jokenpo.services.exceptions.CustomException;
-import br.com.btg.jokenpo.repository.PlayerRepository;
+import br.com.btg.jokenpo.repositories.PlayerRepository;
 import br.com.btg.jokenpo.services.exceptions.ContentAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +31,14 @@ public class PlayerService {
 
     public List<PlayerResponse> findAll(){
         LOGGER.debug("Searching all players");
-        List<Player> playersList = playerRepository.findAll();
+        List<PlayerEntity> playersList = playerRepository.findAll();
         List<PlayerResponse> responseList = new ArrayList<>();
         playersList.forEach(element -> responseList.add(PlayerMapper.entityToResponse(element)));
         LOGGER.debug("Listed players");
         return responseList;
     }
 
-    public Player findByName(String name){
+    public PlayerEntity findByName(String name){
         LOGGER.debug("Searching the player {}", name);
         return playerRepository.findByName(name);
     }
@@ -49,11 +49,11 @@ public class PlayerService {
             throw new ContentAlreadyExistsException("Player with that name already exists");
         }
         LOGGER.debug("Player Data - Request: {}", playerRequest);
-        Player player = PlayerMapper.requestToPlayerEntity(playerRequest);
+        PlayerEntity playerEntity = PlayerMapper.requestToPlayerEntity(playerRequest);
         LOGGER.debug("Inserting a new player");
-        playerRepository.save(player);
+        playerRepository.save(playerEntity);
         LOGGER.debug("Creating the object response (PlayerResponse)");
-        return PlayerMapper.entityToResponse(player);
+        return PlayerMapper.entityToResponse(playerEntity);
     }
 
     public List<PlayerResponse> deleteByName(String name){
@@ -62,10 +62,10 @@ public class PlayerService {
             throw new CustomException("Parameter name is invalid", "Invalid Parameter");
         }
         LOGGER.debug("Searching the player {}", name);
-        Player player = playerRepository.findByName(name);
+        PlayerEntity playerEntity = playerRepository.findByName(name);
         LOGGER.debug("Removing player");
-        if (playerRepository.delete(player)) {
-            LOGGER.debug("Player Deleted {}", player.getPlayerName());
+        if (playerRepository.delete(playerEntity)) {
+            LOGGER.debug("Player Deleted {}", playerEntity.getPlayerName());
             return this.findAll();
         }
         LOGGER.error("Error deleting player");

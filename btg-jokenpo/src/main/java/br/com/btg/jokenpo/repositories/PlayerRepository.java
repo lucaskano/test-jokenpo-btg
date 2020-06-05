@@ -1,10 +1,10 @@
-package br.com.btg.jokenpo.repository;
+package br.com.btg.jokenpo.repositories;
 
 
-import br.com.btg.jokenpo.entity.Player;
+import br.com.btg.jokenpo.entities.PlayerEntity;
 import br.com.btg.jokenpo.services.exceptions.CustomException;
 import br.com.btg.jokenpo.services.exceptions.ObjectNotFoundException;
-import br.com.btg.jokenpo.singleton.PlayerSingleton;
+import br.com.btg.jokenpo.singletons.PlayerSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -20,7 +20,7 @@ public class PlayerRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayerRepository.class);
 
-    public List<Player> findAll(){
+    public List<PlayerEntity> findAll(){
         if(PlayerSingleton.getInstance() == null){
             LOGGER.error("Error trying to find players");
             throw new CustomException("Error trying to find players", "Find Error");
@@ -28,28 +28,28 @@ public class PlayerRepository {
         return PlayerSingleton.getInstance();
     }
 
-    public Player save(Player player){
+    public PlayerEntity save(PlayerEntity playerEntity){
         if(PlayerSingleton.getInstance() != null) {
-            PlayerSingleton.getInstance().add(player);
-            return player;
+            PlayerSingleton.getInstance().add(playerEntity);
+            return playerEntity;
         }
         LOGGER.error("Error when trying to save a new player");
         throw new CustomException("Error when trying to save a new player", "Save Error");
     }
 
-    public boolean delete(Player player){
+    public boolean delete(PlayerEntity playerEntity){
         if(PlayerSingleton.getInstance() == null){
-            LOGGER.error("Error when trying to delete the player {}", player.getPlayerName());
+            LOGGER.error("Error when trying to delete the player {}", playerEntity.getPlayerName());
             throw new CustomException("Error when trying to delete the player", "Delete Error");
         }
-        return PlayerSingleton.getInstance().remove(player);
+        return PlayerSingleton.getInstance().remove(playerEntity);
     }
 
-    public Player findByName (String name){
-        List<Player> playersList = findAll().stream()
+    public PlayerEntity findByName (String name){
+        List<PlayerEntity> playersList = findAll().stream()
                 .filter(element -> (element.getPlayerName().compareToIgnoreCase(name) == 0))
                 .collect(Collectors.toList());
-        Optional<Player> optional = playersList.stream().findFirst();
+        Optional<PlayerEntity> optional = playersList.stream().findFirst();
         if(optional.isPresent()){
             return optional.get();
         }

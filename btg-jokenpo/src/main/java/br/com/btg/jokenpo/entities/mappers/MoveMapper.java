@@ -1,7 +1,7 @@
-package br.com.btg.jokenpo.entity.mapper;
+package br.com.btg.jokenpo.entities.mappers;
 
 import br.com.btg.jokenpo.dto.MoveResponse;
-import br.com.btg.jokenpo.entity.Move;
+import br.com.btg.jokenpo.entities.MoveEntity;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +12,12 @@ public class MoveMapper {
 
     private static ModelMapper MAPPER = new ModelMapper();
 
-    public static Move requestToEntity(Move moveRequest){
+    public static MoveEntity requestToEntity(MoveEntity moveEntityRequest){
         LOGGER.debug("Converting: request object to entity object");
-        return MAPPER.map(moveRequest, Move.class);
+        return MAPPER.map(moveEntityRequest, MoveEntity.class);
     }
 
-    public static MoveResponse entityToResponse(Move entity) {
+    public static MoveResponse entityToResponse(MoveEntity entity) {
         LOGGER.debug("Converting: entity object to response object");
         MoveResponse response = MAPPER.map(entity, MoveResponse.class);
         response.setMovement(entity.getEnumMovement());
