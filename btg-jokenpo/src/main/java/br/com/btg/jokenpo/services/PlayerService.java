@@ -5,12 +5,12 @@ import br.com.btg.jokenpo.dto.PlayerResponse;
 import br.com.btg.jokenpo.entity.Player;
 import br.com.btg.jokenpo.entity.mapper.PlayerMapper;
 import br.com.btg.jokenpo.enumeration.EnumException;
-import br.com.btg.jokenpo.exception.JokenpoException;
+import br.com.btg.jokenpo.exception.GenericException;
 import br.com.btg.jokenpo.repository.PlayerRepository;
+import br.com.btg.jokenpo.service.exceptions.ContentAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -26,11 +26,11 @@ public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
 
-    public PlayerService(){
+    public PlayerService() {
 
     }
 
-    public List<PlayerResponse> findAll() throws JokenpoException{
+    public List<PlayerResponse> findAll() throws GenericException {
         LOGGER.debug("Searching all players");
         List<Player> playersList = playerRepository.findAll();
         List<PlayerResponse> responseList = new ArrayList<>();
@@ -41,41 +41,46 @@ public class PlayerService {
         return responseList;
     }
 
-    public Player findByName(String name) throws JokenpoException{
+    public Player findByName(String name) throws GenericException {
         LOGGER.debug("Searching the player " + name);
         return playerRepository.findByName(name);
     }
 
-    public void save(PlayerRequest playerRequest) throws JokenpoException{
+    public PlayerResponse save(PlayerRequest playerRequest) throws GenericException {
+        if (this.checkIfAlreadyExistsByName(playerRequest.getName())) {
+            LOGGER.error("Player with that name already exists");
+            throw new ContentAlreadyExistsException("Player with that name already exists");
+        }
         LOGGER.debug("Player Data - Request: " + playerRequest.toString());
         Player player = PlayerMapper.requestToPlayerEntity(playerRequest);
         LOGGER.debug("Inserting a new player");
         playerRepository.save(player);
-        PlayerMapper.entityToResponse(player);
+        LOGGER.debug("Creating the object response (PlayerResponse)");
+        return PlayerMapper.entityToResponse(player);
     }
 
-    public List<PlayerResponse> deleteByName(String name) throws JokenpoException{
-        if(StringUtils.isEmpty(name)){
+    public List<PlayerResponse> deleteByName(String name) throws GenericException {
+        if (StringUtils.isEmpty(name)) {
             LOGGER.error("Parameter name is invalid");
-            throw new JokenpoException(EnumException.PARAM_ERROR);
+            throw new GenericException(EnumException.INVALID_PARAM);
         }
-            LOGGER.debug("Searching the player " + name);
-            Player player = playerRepository.findByName(name);
-            LOGGER.debug("Removing player");
-            if(playerRepository.delete(player)){
-                LOGGER.debug("Player Deleted " + player.getName());
-                return this.findAll();
-            }
-            LOGGER.error("Error deleting player");
-            throw new JokenpoException(EnumException.PLAYER_DELETE_ERROR);
+        LOGGER.debug("Searching the player " + name);
+        Player player = playerRepository.findByName(name);
+        LOGGER.debug("Removing player");
+        if (playerRepository.delete(player)) {
+            LOGGER.debug("Player Deleted " + player.getName());
+            return this.findAll();
+        }
+        LOGGER.error("Error deleting player");
+        throw new GenericException(EnumException.PLAYER_DELETING_ERROR);
     }
 
-    private Boolean verifyIfAlreadyExistsByName(String name) {
+    private Boolean checkIfAlreadyExistsByName(String name) {
         try {
             if (!Objects.isNull(this.playerRepository.findByName(name))) {
                 return true;
             }
-        } catch (JokenpoException e) {
+        } catch (RuntimeException e) {
             return false;
         }
         return false;
