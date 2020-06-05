@@ -1,8 +1,9 @@
 package br.com.btg.jokenpo.controller;
 
 import br.com.btg.jokenpo.dto.PlayerRequest;
-import br.com.btg.jokenpo.exception.JokenpoException;
-import br.com.btg.jokenpo.service.PlayerService;
+import br.com.btg.jokenpo.dto.api.FormatResponse;
+import br.com.btg.jokenpo.services.exceptions.CustomException;
+import br.com.btg.jokenpo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,19 +24,25 @@ public class PlayerController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getAll() throws JokenpoException{
-        return ResponseEntity.ok().body(playerService.findAll());
+    public ResponseEntity<Object> getAll() throws CustomException {
+        return ResponseEntity.ok(new FormatResponse<>(playerService.findAll()));
+    }
+
+    @GetMapping(path = "/{playerName}")
+    public ResponseEntity<Object> getByName(@PathVariable("playerName") String playerName) throws CustomException {
+        return ResponseEntity.ok(new FormatResponse<>(playerService.findByName(playerName)));
     }
 
     @PostMapping
     public ResponseEntity<Object> insertPlayer(@Valid @RequestBody PlayerRequest playerRequest)
-            throws JokenpoException{
-        playerService.save(playerRequest);
-        return ResponseEntity.ok().body("The player " + playerRequest.getName() + " inserted");
+            throws CustomException {
+        return ResponseEntity.ok(
+                new FormatResponse<>(playerService.save(playerRequest)));
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> deletePlayer(@PathParam("name") String name) throws JokenpoException{
+    public ResponseEntity<Object> deletePlayer(@PathParam("name") String name) throws CustomException {
         return ResponseEntity.ok(playerService.deleteByName(name));
     }
+
 }

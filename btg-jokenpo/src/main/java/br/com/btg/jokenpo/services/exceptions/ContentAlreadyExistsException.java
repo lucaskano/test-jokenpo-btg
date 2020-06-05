@@ -1,4 +1,4 @@
-package br.com.btg.jokenpo.service.exceptions;
+package br.com.btg.jokenpo.services.exceptions;
 
 public class ContentAlreadyExistsException extends RuntimeException{
 

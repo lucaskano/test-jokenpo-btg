@@ -8,7 +8,7 @@ import java.util.List;
 public class PlayerSingleton {
 
     private static List<Player> PLAYER_INSTANCE;
-    private static String INFO = "Player Singleton Instance";
+    private static final String INFO = "Player Singleton Instance";
 
     private PlayerSingleton(){
 
@@ -16,12 +16,12 @@ public class PlayerSingleton {
 
     public static List<Player> getInstance(){
         if(PLAYER_INSTANCE == null){
-            PLAYER_INSTANCE = new ArrayList<Player>();
+            PLAYER_INSTANCE = new ArrayList<>();
         }
         return PLAYER_INSTANCE;
     }
 
     public String getInfo(){
-        return this.INFO;
+        return INFO;
     }
 }

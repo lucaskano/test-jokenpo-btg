@@ -1,13 +1,12 @@
-package br.com.btg.jokenpo.service;
+package br.com.btg.jokenpo.services;
 
 import br.com.btg.jokenpo.dto.PlayerRequest;
 import br.com.btg.jokenpo.dto.PlayerResponse;
 import br.com.btg.jokenpo.entity.Player;
 import br.com.btg.jokenpo.entity.mapper.PlayerMapper;
-import br.com.btg.jokenpo.enumeration.EnumException;
-import br.com.btg.jokenpo.exception.GenericException;
+import br.com.btg.jokenpo.services.exceptions.CustomException;
 import br.com.btg.jokenpo.repository.PlayerRepository;
-import br.com.btg.jokenpo.service.exceptions.ContentAlreadyExistsException;
+import br.com.btg.jokenpo.services.exceptions.ContentAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,28 +29,26 @@ public class PlayerService {
 
     }
 
-    public List<PlayerResponse> findAll() throws GenericException {
+    public List<PlayerResponse> findAll(){
         LOGGER.debug("Searching all players");
         List<Player> playersList = playerRepository.findAll();
         List<PlayerResponse> responseList = new ArrayList<>();
-        playersList.forEach(element -> {
-            responseList.add(PlayerMapper.entityToResponse(element));
-        });
+        playersList.forEach(element -> responseList.add(PlayerMapper.entityToResponse(element)));
         LOGGER.debug("Listed players");
         return responseList;
     }
 
-    public Player findByName(String name) throws GenericException {
-        LOGGER.debug("Searching the player " + name);
+    public Player findByName(String name){
+        LOGGER.debug("Searching the player {}", name);
         return playerRepository.findByName(name);
     }
 
-    public PlayerResponse save(PlayerRequest playerRequest) throws GenericException {
-        if (this.checkIfAlreadyExistsByName(playerRequest.getName())) {
+    public PlayerResponse save(PlayerRequest playerRequest){
+        if (this.checkIfAlreadyExistsByName(playerRequest.getPlayerName())) {
             LOGGER.error("Player with that name already exists");
             throw new ContentAlreadyExistsException("Player with that name already exists");
         }
-        LOGGER.debug("Player Data - Request: " + playerRequest.toString());
+        LOGGER.debug("Player Data - Request: {}", playerRequest);
         Player player = PlayerMapper.requestToPlayerEntity(playerRequest);
         LOGGER.debug("Inserting a new player");
         playerRepository.save(player);
@@ -59,20 +56,20 @@ public class PlayerService {
         return PlayerMapper.entityToResponse(player);
     }
 
-    public List<PlayerResponse> deleteByName(String name) throws GenericException {
+    public List<PlayerResponse> deleteByName(String name){
         if (StringUtils.isEmpty(name)) {
             LOGGER.error("Parameter name is invalid");
-            throw new GenericException(EnumException.INVALID_PARAM);
+            throw new CustomException("Parameter name is invalid", "Invalid Parameter");
         }
-        LOGGER.debug("Searching the player " + name);
+        LOGGER.debug("Searching the player {}", name);
         Player player = playerRepository.findByName(name);
         LOGGER.debug("Removing player");
         if (playerRepository.delete(player)) {
-            LOGGER.debug("Player Deleted " + player.getName());
+            LOGGER.debug("Player Deleted {}", player.getPlayerName());
             return this.findAll();
         }
         LOGGER.error("Error deleting player");
-        throw new GenericException(EnumException.PLAYER_DELETING_ERROR);
+        throw new CustomException("Error deleting player", "Delete Error");
     }
 
     private Boolean checkIfAlreadyExistsByName(String name) {

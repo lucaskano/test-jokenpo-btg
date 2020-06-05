@@ -2,13 +2,13 @@ package br.com.btg.jokenpo.dto.api;
 
 import java.sql.Timestamp;
 
-public class FormatResponse {
+public class TimeResponse {
 
     private Timestamp timestamp;
 
-    public FormatResponse() {}
+    public TimeResponse() {}
 
-    public FormatResponse(Timestamp timestamp) {
+    public TimeResponse(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 

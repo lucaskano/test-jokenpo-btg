@@ -1,17 +1,22 @@
 package br.com.btg.jokenpo.services.exceptions;
 
-import br.com.btg.jokenpo.enumeration.EnumException;
+public class CustomException extends RuntimeException{
 
-public class GenericException extends RuntimeException{
+    private String errorType;
 
-    public GenericException(String message){
+    public CustomException(String message, String errorType){
         super(message);
     }
 
-    public GenericException(String message, Throwable cause){
+    public CustomException(String message, Throwable cause){
         super(message, cause);
     }
 
-    public GenericException(EnumException enumGenericException) {
+    public String getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(String errorType) {
+        this.errorType = errorType;
     }
 }

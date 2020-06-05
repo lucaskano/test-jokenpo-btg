@@ -1,25 +1,27 @@
 package br.com.btg.jokenpo.dto;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 public class PlayerResponse {
 
-    private String name;
+    @NotBlank(message = "Player name is required")
+    private String playerName;
 
     public PlayerResponse(){
 
     }
 
-    public PlayerResponse(String name) {
-        this.name = name;
+    public PlayerResponse(String playerName) {
+        this.playerName = playerName;
     }
 
-    public String getName() {
-        return name;
+    public String getPlayerName() {
+        return playerName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     @Override
@@ -27,18 +29,18 @@ public class PlayerResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerResponse that = (PlayerResponse) o;
-        return Objects.equals(name, that.name);
+        return Objects.equals(playerName, that.playerName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(playerName);
     }
 
     @Override
     public String toString() {
         return "PlayerResponse{" +
-                "name='" + name + '\'' +
+                "name='" + playerName + '\'' +
                 '}';
     }
 }

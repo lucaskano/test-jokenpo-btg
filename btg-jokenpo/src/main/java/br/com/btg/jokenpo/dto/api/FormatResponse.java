@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.sql.Timestamp;
 
-public class ApiResponse<T> {
+public class FormatResponse<T> {
 
-    private FormatResponse meta;
+    private TimeResponse meta;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
-    public ApiResponse() {
+    public FormatResponse() {
     }
 
-    public ApiResponse(T data) {
-        this.meta = new FormatResponse(new Timestamp(System.currentTimeMillis()));
+    public FormatResponse(T data) {
+        this.meta = new TimeResponse(new Timestamp(System.currentTimeMillis()));
         this.data = data;
     }
 
@@ -27,11 +27,11 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
-    public FormatResponse getMeta() {
+    public TimeResponse getMeta() {
         return meta;
     }
 
-    public void setMeta (FormatResponse meta) {
+    public void setMeta (TimeResponse meta) {
         this.meta = meta;
     }
 
