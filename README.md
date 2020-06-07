@@ -33,6 +33,8 @@ As entradas das jogadas deverão ser disponibilizadas através de APIs REST, al�
 - Gerenciamento de dependências: Gradle; 
 
 - Realização de testes unitários: JUnit;
+  
+- Para armazenamento em memória foi utilizado o padrão Singleton.
 
 - Não há utilização de banco de dados para esse projeto;
 

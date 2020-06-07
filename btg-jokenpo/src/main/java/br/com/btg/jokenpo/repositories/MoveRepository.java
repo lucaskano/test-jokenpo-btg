@@ -13,6 +13,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * ATTENTION: The JPARepository extending interface was not used due to not using the database.
+ * However, it was decided to follow the Singleton pattern in order to store the data.
+ *
+ */
+
 @Repository
 @NoRepositoryBean
 public class MoveRepository {
