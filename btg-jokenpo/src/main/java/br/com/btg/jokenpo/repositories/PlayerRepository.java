@@ -45,16 +45,16 @@ public class PlayerRepository {
         return PlayerSingleton.getInstance().remove(playerEntity);
     }
 
-    public PlayerEntity findByName (String name){
-        List<PlayerEntity> playersList = findAll().stream()
-                .filter(element -> (element.getPlayerName().compareToIgnoreCase(name) == 0))
+    public PlayerEntity findByName(String name){
+        List<PlayerEntity> list = findAll().stream()
+                .filter(elem -> (elem.getPlayerName().compareToIgnoreCase(name) == 0))
                 .collect(Collectors.toList());
-        Optional<PlayerEntity> optional = playersList.stream().findFirst();
-        if(optional.isPresent()){
-            return optional.get();
+        Optional<PlayerEntity> opt = list.stream().findFirst();
+        if(opt.isPresent()){
+            return opt.get();
         }
-        LOGGER.error("Player not found for name: {}", name);
-        throw new ObjectNotFoundException(String.format("Player %s not found", name));
+        LOGGER.info("Player not found : {}", name);
+        throw new CustomException("Player not found", "Object not found");
     }
 
 }

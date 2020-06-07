@@ -11,7 +11,7 @@ public class PlayerRequest {
 
     @NotBlank(message = "Player name is required" )
     @JsonProperty(value = "playerName")
-    @Length(min = 4, max = 120, message = "The length must be between 4 and 120 characters")
+    @Length(min = 1, max = 120, message = "The length must be between 1 and 120 characters")
     private String playerName;
 
     public PlayerRequest(){
